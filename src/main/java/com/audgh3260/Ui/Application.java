@@ -142,15 +142,21 @@ public class Application {
         int id = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
+        // 입력한 ID의 상품이 존재하는지 확인
+        Product product = productRepository.getProduct(id);
+        if (product == null) {
+            System.out.println("해당 ID의 상품이 존재하지 않습니다.");
+            return; // 상품이 없으므로 메서드 종료
+        }
+
         System.out.print("구매할 수량 입력: ");
         int quantity = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
         if (productRepository.releaseProduct(id, quantity)) {
-            Product product = productRepository.getProduct(id);
-            System.out.println(product.getName() + " 상품을 구매 완료하였습니다.");
+            System.out.println("상품 구매 완료하였습니다.");
         } else {
-            System.out.println("구매 실패: 재고가 부족하거나 해당 상품이 존재하지 않습니다.");
+            System.out.println("구매 실패: 재고가 부족합니다.");
         }
     }
 
