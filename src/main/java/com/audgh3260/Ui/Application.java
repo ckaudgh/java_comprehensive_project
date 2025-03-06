@@ -1,19 +1,19 @@
 package com.audgh3260.Ui;
 
 import com.audgh3260.Domain.Product;
-import com.audgh3260.Persistence.ProductRepository;
+import com.audgh3260.service.ProductService;
 import com.audgh3260.Persistence.FileProductStorage;
 
 import java.util.Map;
 import java.util.Scanner;
 
 public class Application {
-    private final ProductRepository productRepository;
+    private final ProductService productService;
     private final Scanner scanner;
 
     public Application(String filename) {
         FileProductStorage fileProductStorage = new FileProductStorage(filename);
-        this.productRepository = new ProductRepository(fileProductStorage);
+        this.productService = new ProductService(fileProductStorage);
         this.scanner = new Scanner(System.in);
     }
 
@@ -75,7 +75,7 @@ public class Application {
         int quantity = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
-        productRepository.insertOrUpdateProduct(id, name, price, quantity);
+        productService.insertOrUpdateProduct(id, name, price, quantity);
         System.out.println("상품 입고 완료: " + name);
     }
 
@@ -84,7 +84,7 @@ public class Application {
         int id = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
-        Product product = productRepository.getProduct(id);
+        Product product = productService.getProduct(id);
         if (product != null) {
             System.out.println("상품 정보: ID=" + product.getId() + ", 이름=" + product.getName() +
                     ", 가격=" + product.getPrice() + ", 재고=" + product.getQuantity());
@@ -98,7 +98,7 @@ public class Application {
         int id = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
-        if (productRepository.removeProduct(id)) {
+        if (productService.removeProduct(id)) {
             System.out.println("상품이 삭제되었습니다.");
         } else {
             System.out.println("해당 ID의 상품이 존재하지 않아 삭제할 수 없습니다.");
@@ -106,7 +106,7 @@ public class Application {
     }
 
     private void viewAllProducts() {
-        Map<Integer, Product> products = productRepository.getAllProducts();
+        Map<Integer, Product> products = productService.getAllProducts();
         if (products.isEmpty()) {
             System.out.println("등록된 상품이 없습니다.");
         } else {
@@ -123,15 +123,15 @@ public class Application {
         int id = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
-        Product product = productRepository.getProduct(id);
+        Product product = productService.getProduct(id);
         System.out.println("남은 재고 : " + product.getQuantity());
 
         System.out.print("출고할 수량 입력: ");
         int quantity = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
-        if (productRepository.releaseProduct(id, quantity)) {
-            product = productRepository.getProduct(id);
+        if (productService.releaseProduct(id, quantity)) {
+            product = productService.getProduct(id);
             System.out.println(product.getName() + " 상품 출고 완료. ");
         } else {
             System.out.println("구매 실패: 재고가 부족하거나 해당 상품이 존재하지 않습니다.");
@@ -143,7 +143,7 @@ public class Application {
         scanner.nextLine(); // 버퍼 비우기
 
         // 입력한 ID의 상품이 존재하는지 확인
-        Product product = productRepository.getProduct(id);
+        Product product = productService.getProduct(id);
         if (product == null) {
             System.out.println("해당 ID의 상품이 존재하지 않습니다.");
             return; // 상품이 없으므로 메서드 종료
@@ -153,7 +153,7 @@ public class Application {
         int quantity = scanner.nextInt();
         scanner.nextLine(); // 버퍼 비우기
 
-        if (productRepository.releaseProduct(id, quantity)) {
+        if (productService.releaseProduct(id, quantity)) {
             System.out.println("상품 구매 완료하였습니다.");
         } else {
             System.out.println("구매 실패: 재고가 부족합니다.");

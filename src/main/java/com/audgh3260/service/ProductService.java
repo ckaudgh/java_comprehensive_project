@@ -1,16 +1,17 @@
-package com.audgh3260.Persistence;
+package com.audgh3260.service;
 
 import com.audgh3260.Domain.Product;
 import com.audgh3260.Persistence.ProductStorage;
 
 import java.util.Map;
 
-public class ProductRepository {
+public class ProductService {
     private final ProductStorage productStorage;
 
-    public ProductRepository(ProductStorage productStorage) {
+    public ProductService(ProductStorage productStorage) {
         this.productStorage = productStorage;
     }
+    
     public void insertOrUpdateProduct(int id, String name, int price, int quantity) {
         Product product = new Product(id, name, price, quantity);
         productStorage.addOrUpdateProduct(product);
