@@ -144,6 +144,7 @@ public class Application {
 
         // 입력한 ID의 상품이 존재하는지 확인
         Product product = productService.getProduct(id);
+        System.out.println(product.getName() + " 상품 남은 재고 : " + product.getQuantity());
         if (product == null) {
             System.out.println("해당 ID의 상품이 존재하지 않습니다.");
             return; // 상품이 없으므로 메서드 종료
